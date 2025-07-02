@@ -13,12 +13,14 @@ async function getAllPostsContent() {
     if (!Array.isArray(data) || data.length === 0) {
       keepFetching = false;
     } else {
-      const contents = data.map(post => ({
-        id: post.id,
-        slug: post.slug,
-        title: post.title.rendered,
-        content: post.content.rendered
-      }));
+      const contents = data
+        .filter(post => post.content.rendered.includes('https://testrigor.com/how-to-articles/'))
+        .map(post => ({
+          id: post.id,
+          slug: post.slug,
+          title: post.title.rendered,
+          content: post.content.rendered
+        }));
 
       allContents.push(...contents);
       page++;
@@ -26,7 +28,7 @@ async function getAllPostsContent() {
   }
 
   fs.writeFileSync('posts.json', JSON.stringify(allContents, null, 2));
-  console.log('Conteúdo salvo em posts.json');
+  console.log(`Conteúdo salvo em posts.json - ${allContents.length} artigos encontrados`);
 }
 
 getAllPostsContent();
