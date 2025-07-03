@@ -14,12 +14,17 @@ async function getAllPostsContent() {
       keepFetching = false;
     } else {
       const contents = data
-        .filter(post => post.content.rendered.includes('https://testrigor.com/how-to-articles/'))
+        .filter(post => {
+          // Check if the post's link/URL contains 'how-to-articles'
+          const postUrl = post.link || '';
+          return postUrl.includes('/how-to-articles/');
+        })
         .map(post => ({
           id: post.id,
           slug: post.slug,
           title: post.title.rendered,
-          content: post.content.rendered
+          content: post.content.rendered,
+          url: post.link // Adding URL for debugging
         }));
 
       allContents.push(...contents);
